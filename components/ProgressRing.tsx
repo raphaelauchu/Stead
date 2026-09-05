@@ -16,19 +16,10 @@ export default function ProgressRing({
   const clamped = Math.min(Math.max(percent, 0), 100);
   const offset = circumference * (1 - clamped / 100);
   const center = size / 2;
-
   return (
     <div className="relative" style={{ width: size, height: size }}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-        <circle
-          cx={center}
-          cy={center}
-          r={radius}
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={strokeWidth}
-          className="text-surface2"
-        />
+        <circle cx={center} cy={center} r={radius} fill="none" stroke="currentColor" strokeWidth={strokeWidth} className="text-surface2" />
         <circle
           cx={center}
           cy={center}
@@ -41,13 +32,10 @@ export default function ProgressRing({
           strokeDashoffset={offset}
           transform={`rotate(-90 ${center} ${center})`}
           className="text-accent"
+          style={{ transition: "stroke-dashoffset 0.7s cubic-bezier(0.4, 0, 0.2, 1)" }}
         />
       </svg>
-      {children && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          {children}
-        </div>
-      )}
+      {children && <div className="absolute inset-0 flex flex-col items-center justify-center">{children}</div>}
     </div>
   );
 }

@@ -48,10 +48,13 @@
     "greetingFallback": "Today",
     "signOut": "Sign out",
     "level": "Level",
+    "todayXp": "+{xp} XP today",
     "bundleTitle": "Today's bundle — {category}",
-    "bundleComplete": "Bundle complete — bonus +{bonus} XP"
+    "bundleComplete": "Bundle complete — bonus +{bonus} XP",
+    "emptyState": "Check off your first quest below to get started."
   },
   "login": {
+    "tagline": "A progression system for becoming the man you want to be.",
     "signIn": "Sign in",
     "signUp": "Create an account",
     "emailPlaceholder": "you@email.com",

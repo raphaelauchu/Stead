@@ -47,11 +47,32 @@ export default async function Home({
       .map((c) => `${c.category}:${c.item_key}`)
   );
 
-  let historicalXp = 0;
+  // Group completions by day so we can award the per-category bundle
+  // bonus for every day it was actually earned, not just tally raw items.
+  const byDay = new Map<string, Set<string>>();
   for (const c of completions ?? []) {
-    const cat = CATEGORIES.find((cc) => cc.key === c.category);
-    const item = cat?.items.find((i) => i.key === c.item_key);
-    if (item) historicalXp += item.xp;
+    const set = byDay.get(c.day) ?? new Set<string>();
+    set.add(`${c.category}:${c.item_key}`);
+    byDay.set(c.day, set);
+  }
+
+  let historicalXp = 0;
+  let todayXp = 0;
+  for (const [day, doneSet] of byDay) {
+    for (const cat of CATEGORIES) {
+      let catXp = 0;
+      let allDone = true;
+      for (const item of cat.items) {
+        if (doneSet.has(`${cat.key}:${item.key}`)) {
+          catXp += item.xp;
+        } else {
+          allDone = false;
+        }
+      }
+      const bonus = allDone ? BUNDLE_BONUS : 0;
+      historicalXp += catXp + bonus;
+      if (day === today) todayXp += catXp + bonus;
+    }
   }
 
   const categoryPercents: Record<string, number> = {};
@@ -67,9 +88,11 @@ export default async function Home({
   const { level, xpIntoLevel, xpForNext, percent } =
     levelProgress(historicalXp);
 
+  const hasEverCompletedAnything = (completions ?? []).length > 0;
+
   return (
     <main className="min-h-screen flex flex-col items-center px-6 py-16">
-      <div className="flex w-full max-w-sm items-center justify-between">
+      <div className="flex w-full max-w-sm items-center justify-between md:max-w-md">
         <div className="flex items-center gap-3">
           <InfinityMark className="w-8 text-accent" />
           <span className="font-display text-lg tracking-[0.15em] text-ink">
@@ -79,15 +102,23 @@ export default async function Home({
         <LanguageSwitcher />
       </div>
 
-      <div className="mt-10 w-full max-w-sm rounded-[22px] border border-line bg-surface p-8">
+      <div className="mt-10 w-full max-w-sm rounded-[22px] border border-line bg-surface p-8 md:max-w-md">
         <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-widest text-inkdim">
-          <span>
-            {profile?.first_name
-              ? t("greeting", { name: profile.first_name })
-              : t("greetingFallback")}
-          </span>
+          <div className="flex flex-col gap-1">
+            <span>
+              {profile?.first_name
+                ? t("greeting", { name: profile.first_name })
+                : t("greetingFallback")}
+            </span>
+            {todayXp > 0 && (
+              <span className="text-accent">{t("todayXp", { xp: todayXp })}</span>
+            )}
+          </div>
           <form action={signOut.bind(null, locale)}>
-            <button type="submit" className="underline">
+            <button
+              type="submit"
+              className="rounded-full border border-line px-3 py-1.5 text-inkdim transition-colors duration-150 hover:border-accent hover:text-ink active:scale-95"
+            >
               {t("signOut")}
             </button>
           </form>
@@ -131,6 +162,12 @@ export default async function Home({
           ))}
         </div>
 
+        {!hasEverCompletedAnything && (
+          <div className="mt-6 rounded-xl border border-dashed border-line px-4 py-3 text-center font-mono text-[11px] text-inkdim">
+            {t("emptyState")}
+          </div>
+        )}
+
         <div className="mt-7 flex flex-col gap-6 border-t border-line pt-5">
           {CATEGORIES.map((cat) => (
             <div key={cat.key}>
@@ -153,12 +190,12 @@ export default async function Home({
                     >
                       <button
                         type="submit"
-                        className={`flex w-full items-center gap-3 text-left text-sm ${
+                        className={`flex w-full items-center gap-3 rounded-lg px-2 py-1.5 -mx-2 text-left text-sm transition-all duration-150 hover:bg-surface2 active:scale-[0.98] ${
                           done ? "text-ink" : "text-inkdim"
                         }`}
                       >
                         <span
-                          className={`flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border-[1.5px] ${
+                          className={`flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border-[1.5px] transition-colors duration-150 ${
                             done ? "border-accent bg-accent" : "border-line"
                           }`}
                         >

@@ -104,14 +104,24 @@ export default function LoginPage() {
       <div className="mb-2 flex w-full max-w-sm justify-end">
         <LanguageSwitcher />
       </div>
-      <InfinityMark className="w-14 text-accent" />
-      <h1 className="mt-4 font-display text-3xl text-ink">STEAD</h1>
+      <div className="relative flex flex-col items-center">
+        <div
+          className="pointer-events-none absolute h-40 w-40 rounded-full blur-2xl"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(216,181,113,0.20) 0%, transparent 70%)",
+          }}
+        />
+        <InfinityMark className="w-14 text-accent" />
+        <h1 className="mt-4 font-display text-3xl text-ink">STEAD</h1>
+        <p className="mt-2 max-w-xs text-center text-sm text-inkdim">{t("tagline")}</p>
+      </div>
 
       <div className="mt-8 flex w-full max-w-sm rounded-lg border border-line bg-surface p-1">
         <button
           type="button"
           onClick={() => switchMode("signin")}
-          className={`flex-1 rounded-md py-2 text-sm font-medium transition-colors ${
+          className={`flex-1 rounded-md py-2 text-sm font-medium transition-all duration-150 active:scale-[0.98] ${
             mode === "signin" ? "bg-accent text-bg" : "text-inkdim"
           }`}
         >
@@ -120,7 +130,7 @@ export default function LoginPage() {
         <button
           type="button"
           onClick={() => switchMode("signup")}
-          className={`flex-1 rounded-md py-2 text-sm font-medium transition-colors ${
+          className={`flex-1 rounded-md py-2 text-sm font-medium transition-all duration-150 active:scale-[0.98] ${
             mode === "signup" ? "bg-accent text-bg" : "text-inkdim"
           }`}
         >
@@ -152,7 +162,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="rounded-lg bg-accent px-4 py-3 text-sm font-semibold text-bg disabled:opacity-60"
+            className="rounded-lg bg-accent px-4 py-3 text-sm font-semibold text-bg transition-transform duration-150 active:scale-[0.98] disabled:opacity-60 disabled:active:scale-100"
           >
             {loading ? t("signInLoading") : t("signIn")}
           </button>
@@ -206,7 +216,7 @@ export default function LoginPage() {
             {GOAL_KEYS.map((key) => (
               <label
                 key={key}
-                className={`flex cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 text-sm ${
+                className={`flex cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 text-sm transition-colors duration-150 ${
                   goal === key
                     ? "border-accent text-ink"
                     : "border-line text-inkdim"
@@ -228,7 +238,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="mt-2 rounded-lg bg-accent px-4 py-3 text-sm font-semibold text-bg disabled:opacity-60"
+            className="mt-2 rounded-lg bg-accent px-4 py-3 text-sm font-semibold text-bg transition-transform duration-150 active:scale-[0.98] disabled:opacity-60 disabled:active:scale-100"
           >
             {loading ? t("signUpLoading") : t("signUpButton")}
           </button>

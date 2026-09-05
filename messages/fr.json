@@ -48,10 +48,13 @@
     "greetingFallback": "Aujourd'hui",
     "signOut": "Se déconnecter",
     "level": "Niveau",
+    "todayXp": "+{xp} XP aujourd'hui",
     "bundleTitle": "Bundle du jour — {category}",
-    "bundleComplete": "Bundle complet — bonus +{bonus} XP"
+    "bundleComplete": "Bundle complet — bonus +{bonus} XP",
+    "emptyState": "Coche ta première quête ci-dessous pour commencer."
   },
   "login": {
+    "tagline": "Un système de progression pour devenir l'homme que tu veux être.",
     "signIn": "Se connecter",
     "signUp": "Créer un compte",
     "emailPlaceholder": "ton@courriel.com",
