@@ -108,11 +108,16 @@
   },
   "quests": {
     "title": "My quests",
-    "subtitle": "Customize the quests in each category — edit the text, the XP, add or remove them.",
+    "subtitle": "Customize the quests in each category — edit the text, the difficulty, add or remove them.",
     "save": "Save",
     "delete": "Remove",
     "newQuestPlaceholder": "New quest",
     "add": "Add",
-    "minimumNotice": "Every category must keep at least one quest."
+    "minimumNotice": "Every category must keep at least one quest.",
+    "difficulty": {
+      "easy": "Easy · 10 XP",
+      "medium": "Medium · 20 XP",
+      "hard": "Hard · 30 XP"
+    }
   }
 }

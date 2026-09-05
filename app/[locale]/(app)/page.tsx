@@ -36,7 +36,7 @@ export default async function TodayPage() {
 
   const { data: completions } = await supabase
     .from("completions")
-    .select("category, item_key, day")
+    .select("category, item_key, day, xp")
     .eq("user_id", user.id);
 
   const doneToday = new Set(
@@ -165,7 +165,8 @@ export default async function TodayPage() {
                       cat.key,
                       item.item_key,
                       today,
-                      !done
+                      !done,
+                      item.xp
                     )}
                   >
                     <button

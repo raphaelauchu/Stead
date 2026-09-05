@@ -27,7 +27,7 @@ export default async function ProgressPage() {
 
   const { data: completions } = await supabase
     .from("completions")
-    .select("category, item_key, day")
+    .select("category, item_key, day, xp")
     .eq("user_id", user.id);
 
   const { byDay, dayXp, categoryTotals, historicalXp } = computeStats(

@@ -2,12 +2,17 @@ import { BUNDLE_BONUS } from "@/lib/categories";
 
 export type StatsCategory = { key: string; items: { key: string; xp: number }[] };
 
-export type Completion = { category: string; item_key: string; day: string };
+// `xp` is the amount actually earned when this quest was checked off,
+// frozen at that moment (see `toggleCompletion` in app/[locale]/actions.ts).
+// It is NOT re-derived from the quest's current XP value, so editing a
+// quest's difficulty later never rewrites past totals or levels.
+export type Completion = { category: string; item_key: string; day: string; xp: number };
 
 /**
  * Groups raw completion rows by day -> set of "category:itemKey" keys done
- * that day. Shared by the dashboard and the stats page so XP/bonus logic
- * never drifts between the two screens.
+ * that day. Used for streaks and for the bundle-bonus "did they finish every
+ * quest in this category today" check — never for XP amounts, which come
+ * straight from each completion's own frozen `xp`.
  */
 export function groupByDay(completions: Completion[]) {
   const byDay = new Map<string, Set<string>>();
@@ -26,24 +31,29 @@ export function computeStats(completions: Completion[], categories: StatsCategor
   const categoryTotals: Record<string, number> = {};
   let historicalXp = 0;
 
+  const addXp = (day: string, category: string, amount: number) => {
+    dayXp.set(day, (dayXp.get(day) ?? 0) + amount);
+    categoryTotals[category] = (categoryTotals[category] ?? 0) + amount;
+    historicalXp += amount;
+  };
+
+  // Sum each completion's own frozen XP — this is what makes past totals
+  // immune to a quest's XP being edited afterwards.
+  for (const c of completions) {
+    addXp(c.day, c.category, c.xp ?? 0);
+  }
+
+  // Bundle bonus still depends on the *current* quest definition (which
+  // items exist in a category today), since it's a same-day completeness
+  // check rather than a historical XP amount.
   for (const [day, doneSet] of byDay) {
-    let dXp = 0;
     for (const cat of categories) {
-      let catXp = 0;
-      let allDone = cat.items.length > 0;
-      for (const item of cat.items) {
-        if (doneSet.has(`${cat.key}:${item.key}`)) {
-          catXp += item.xp;
-        } else {
-          allDone = false;
-        }
+      if (cat.items.length === 0) continue;
+      const allDone = cat.items.every((item) => doneSet.has(`${cat.key}:${item.key}`));
+      if (allDone) {
+        addXp(day, cat.key, BUNDLE_BONUS);
       }
-      const total = catXp + (allDone ? BUNDLE_BONUS : 0);
-      dXp += total;
-      categoryTotals[cat.key] = (categoryTotals[cat.key] ?? 0) + total;
     }
-    dayXp.set(day, dXp);
-    historicalXp += dXp;
   }
 
   return { byDay, dayXp, categoryTotals, historicalXp };

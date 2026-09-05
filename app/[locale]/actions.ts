@@ -3,12 +3,19 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "@/i18n/navigation";
+import { ALLOWED_XP_VALUES } from "@/lib/categories";
+
+/** Clamps a requested XP value to one of the fixed difficulty tiers (defense in depth — the UI only ever sends one of these). */
+function clampXp(value: number, fallback: number): number {
+  return ALLOWED_XP_VALUES.includes(value) ? value : fallback;
+}
 
 export async function toggleCompletion(
   category: string,
   itemKey: string,
   day: string,
-  done: boolean
+  done: boolean,
+  xp: number
 ) {
   const supabase = createClient();
   const {
@@ -17,9 +24,12 @@ export async function toggleCompletion(
   if (!user) return;
 
   if (done) {
+    // The XP earned is frozen at the moment of check-off. If the quest's
+    // XP is edited later, this row keeps the value it was worth today —
+    // past totals and levels never get rewritten retroactively.
     await supabase
       .from("completions")
-      .insert({ user_id: user.id, category, item_key: itemKey, day });
+      .insert({ user_id: user.id, category, item_key: itemKey, day, xp });
   } else {
     await supabase
       .from("completions")
@@ -58,7 +68,6 @@ export async function updateProfile(formData: FormData) {
   revalidatePath("/", "layout");
 }
 
-
 export async function updateQuestItem(itemId: string, formData: FormData) {
   const supabase = createClient();
   const {
@@ -68,7 +77,7 @@ export async function updateQuestItem(itemId: string, formData: FormData) {
 
   const label = String(formData.get("label") ?? "").trim();
   const xpRaw = parseInt(String(formData.get("xp") ?? ""), 10);
-  const xp = Number.isFinite(xpRaw) && xpRaw > 0 ? xpRaw : 1;
+  const xp = clampXp(xpRaw, 20);
   if (!label) return;
 
   await supabase
@@ -114,7 +123,7 @@ export async function addQuestItem(category: string, formData: FormData) {
 
   const label = String(formData.get("label") ?? "").trim();
   const xpRaw = parseInt(String(formData.get("xp") ?? ""), 10);
-  const xp = Number.isFinite(xpRaw) && xpRaw > 0 ? xpRaw : 10;
+  const xp = clampXp(xpRaw, 20);
   if (!label) return;
 
   const { count } = await supabase

@@ -17,35 +17,56 @@ export const DEFAULT_QUEST_TEMPLATE: CategoryTemplate[] = [
   {
     key: "corps",
     items: [
-      { key: "seance", xp: 25 },
+      { key: "seance", xp: 30 },
       { key: "repas", xp: 20 },
-      { key: "routine_soir", xp: 15 },
+      { key: "routine_soir", xp: 10 },
     ],
   },
   {
     key: "esprit",
     items: [
       { key: "tache", xp: 20 },
-      { key: "lecture", xp: 15 },
-      { key: "finances", xp: 15 },
+      { key: "lecture", xp: 10 },
+      { key: "finances", xp: 10 },
     ],
   },
   {
     key: "coeur",
     items: [
-      { key: "emotion", xp: 25 },
+      { key: "emotion", xp: 30 },
       { key: "moment", xp: 20 },
-      { key: "conversation", xp: 20 },
+      { key: "conversation", xp: 30 },
     ],
   },
   {
     key: "ame",
     items: [
-      { key: "solo", xp: 15 },
-      { key: "journaling", xp: 15 },
-      { key: "routine_matin", xp: 15 },
+      { key: "solo", xp: 10 },
+      { key: "journaling", xp: 10 },
+      { key: "routine_matin", xp: 10 },
     ],
   },
 ];
 
 export const BUNDLE_BONUS = 10;
+
+// Custom quests can no longer take an arbitrary XP value — that would let
+// someone inflate their own level progression. Every quest's XP is one of
+// these three fixed difficulty tiers instead. `updateQuestItem` and
+// `addQuestItem` (app/[locale]/actions.ts) clamp to this list server-side,
+// so it's the single source of truth for what a quest can be worth.
+export const XP_TIERS = [
+  { key: "easy", xp: 10 },
+  { key: "medium", xp: 20 },
+  { key: "hard", xp: 30 },
+] as const;
+export type XpTierKey = (typeof XP_TIERS)[number]["key"];
+export const ALLOWED_XP_VALUES: number[] = XP_TIERS.map((t) => t.xp);
+
+/** Snaps a legacy/free-form XP value (from before tiers existed) to the closest tier, for display. */
+export function nearestXpTier(xp: number): number {
+  return XP_TIERS.reduce(
+    (closest, t) => (Math.abs(t.xp - xp) < Math.abs(closest.xp - xp) ? t : closest),
+    XP_TIERS[0]
+  ).xp;
+}

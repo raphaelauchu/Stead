@@ -108,11 +108,16 @@
   },
   "quests": {
     "title": "Mes quêtes",
-    "subtitle": "Personnalise les quêtes de chaque catégorie — modifie le texte, le XP, ajoute-en ou retire-en.",
+    "subtitle": "Personnalise les quêtes de chaque catégorie — modifie le texte, la difficulté, ajoute-en ou retire-en.",
     "save": "Enregistrer",
     "delete": "Retirer",
     "newQuestPlaceholder": "Nouvelle quête",
     "add": "Ajouter",
-    "minimumNotice": "Chaque catégorie doit garder au moins une quête."
+    "minimumNotice": "Chaque catégorie doit garder au moins une quête.",
+    "difficulty": {
+      "easy": "Facile · 10 XP",
+      "medium": "Moyen · 20 XP",
+      "hard": "Difficile · 30 XP"
+    }
   }
 }
