@@ -59,8 +59,60 @@ export function computeStats(completions: Completion[], categories: StatsCategor
   return { byDay, dayXp, categoryTotals, historicalXp };
 }
 
-function isoDay(d: Date) {
+export function isoDay(d: Date) {
   return d.toISOString().slice(0, 10);
+}
+
+export type DayCategoryItem = { key: string; label: string; xp: number; done: boolean };
+export type DayCategoryDetail = {
+  key: string;
+  items: DayCategoryItem[];
+  doneCount: number;
+  totalCount: number;
+  percent: number;
+  xpEarned: number;
+};
+
+/**
+ * Per-category breakdown for one specific day — which of that category's
+ * *current* quests were done that day, and the total XP actually earned in
+ * that category that day (frozen completion XP, so it also folds in any
+ * Objectifs milestone/objective bonuses earned that day under this pillar,
+ * even though those aren't "quest items" and won't appear in `items`).
+ * Powers the Progress page's calendar-driven, per-category detail cards.
+ */
+export function dayCategoryDetails(
+  completions: Completion[],
+  categories: { key: string; items: { key: string; label: string; xp: number }[] }[],
+  day: string
+): DayCategoryDetail[] {
+  const doneKeys = new Set<string>();
+  const xpByCategory: Record<string, number> = {};
+
+  for (const c of completions) {
+    if (c.day !== day) continue;
+    doneKeys.add(`${c.category}:${c.item_key}`);
+    xpByCategory[c.category] = (xpByCategory[c.category] ?? 0) + (c.xp ?? 0);
+  }
+
+  return categories.map((cat) => {
+    const items = cat.items.map((item) => ({
+      key: item.key,
+      label: item.label,
+      xp: item.xp,
+      done: doneKeys.has(`${cat.key}:${item.key}`),
+    }));
+    const doneCount = items.filter((i) => i.done).length;
+    const totalCount = items.length;
+    return {
+      key: cat.key,
+      items,
+      doneCount,
+      totalCount,
+      percent: totalCount > 0 ? Math.round((doneCount / totalCount) * 100) : 0,
+      xpEarned: xpByCategory[cat.key] ?? 0,
+    };
+  });
 }
 
 /**

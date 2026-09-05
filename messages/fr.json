@@ -65,8 +65,9 @@
     "level": "Niveau",
     "streakLabel": "Jours de suite",
     "activeDaysLabel": "Jours actifs",
-    "last14Days": "14 derniers jours",
-    "byCategory": "Par catégorie"
+    "yesterdayTab": "Hier",
+    "todayTab": "Aujourd'hui",
+    "pickDate": "Choisir une date"
   },
   "profile": {
     "title": "Profil",
