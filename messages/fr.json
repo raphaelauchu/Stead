@@ -95,5 +95,14 @@
       "userExists": "Un compte existe déjà avec ce courriel.",
       "passwordTooShort": "Le mot de passe doit contenir au moins 6 caractères."
     }
+  },
+  "coach": {
+    "newUser": "Coche ta première quête pour commencer ta progression.",
+    "streakRisk": "Tu es à {streak} jours de suite — ne casse pas ta séquence, coche au moins une quête aujourd'hui.",
+    "almostDone": "Presque fini ! Il te reste {count, plural, one {# quête} other {# quêtes}} pour boucler ta journée.",
+    "neglectedCategory": "Ton domaine {category} est à la traîne par rapport aux autres — essaie d'y consacrer un peu de temps aujourd'hui.",
+    "restart": "Nouvelle séquence, nouveau départ — une seule quête aujourd'hui suffit pour repartir.",
+    "praiseCategory": "Bundle {category} complété aujourd'hui — excellent travail, continue comme ça.",
+    "default": "Tu es sur la bonne voie. Continue à avancer, une quête à la fois."
   }
 }

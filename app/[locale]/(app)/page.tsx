@@ -1,7 +1,8 @@
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { CATEGORIES, BUNDLE_BONUS } from "@/lib/categories";
-import { computeStats } from "@/lib/stats";
+import { computeStats, computeStreak } from "@/lib/stats";
+import { computeCoachInsight } from "@/lib/coach";
 import { levelProgress } from "@/lib/xp";
 import { toggleCompletion } from "../actions";
 import ProgressRing from "@/components/ProgressRing";
@@ -11,6 +12,7 @@ export const dynamic = "force-dynamic";
 export default async function TodayPage() {
   const t = await getTranslations("dashboard");
   const tCategories = await getTranslations("categories");
+  const tCoach = await getTranslations("coach");
 
   const supabase = createClient();
   const {
@@ -37,8 +39,9 @@ export default async function TodayPage() {
       .map((c) => `${c.category}:${c.item_key}`)
   );
 
-  const { dayXp, historicalXp } = computeStats(completions ?? []);
+  const { byDay, dayXp, categoryTotals, historicalXp } = computeStats(completions ?? []);
   const todayXp = dayXp.get(today) ?? 0;
+  const streak = computeStreak(byDay);
 
   const categoryPercents: Record<string, number> = {};
   for (const cat of CATEGORIES) {
@@ -55,6 +58,22 @@ export default async function TodayPage() {
 
   const hasEverCompletedAnything = (completions ?? []).length > 0;
 
+  const insight = computeCoachInsight({
+    doneToday,
+    categoryPercents,
+    categoryTotals,
+    streak,
+    hasEverCompletedAnything,
+  });
+  const insightCategoryLabel =
+    typeof insight.values?.category === "string"
+      ? tCategories(`${insight.values.category}.label`)
+      : undefined;
+  const coachMessage = tCoach(insight.id, {
+    ...insight.values,
+    ...(insightCategoryLabel ? { category: insightCategoryLabel } : {}),
+  });
+
   return (
     <div className="w-full max-w-sm rounded-[22px] border border-line bg-surface p-8 md:max-w-md">
       <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-widest text-inkdim">
@@ -68,6 +87,13 @@ export default async function TodayPage() {
             <span className="text-accent">{t("todayXp", { xp: todayXp })}</span>
           )}
         </div>
+      </div>
+
+      <div className="mt-5 flex items-start gap-3 rounded-xl border border-line bg-bg px-4 py-3">
+        <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border border-accent text-[10px] font-semibold text-accent">
+          i
+        </span>
+        <p className="text-sm text-inkdim">{coachMessage}</p>
       </div>
 
       <div className="relative mt-6 flex justify-center">
@@ -107,12 +133,6 @@ export default async function TodayPage() {
           </div>
         ))}
       </div>
-
-      {!hasEverCompletedAnything && (
-        <div className="mt-6 rounded-xl border border-dashed border-line px-4 py-3 text-center font-mono text-[11px] text-inkdim">
-          {t("emptyState")}
-        </div>
-      )}
 
       <div className="mt-7 flex flex-col gap-6 border-t border-line pt-5">
         {CATEGORIES.map((cat) => (

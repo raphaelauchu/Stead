@@ -95,5 +95,14 @@
       "userExists": "An account already exists with this email.",
       "passwordTooShort": "Password must be at least 6 characters."
     }
+  },
+  "coach": {
+    "newUser": "Check off your first quest to start your progress.",
+    "streakRisk": "You're on a {streak}-day streak — don't break it, check off at least one quest today.",
+    "almostDone": "Almost there! You have {count, plural, one {# quest} other {# quests}} left to close out your day.",
+    "neglectedCategory": "Your {category} area is falling behind the others — try giving it some attention today.",
+    "restart": "New streak, new start — just one quest today is enough to get going again.",
+    "praiseCategory": "{category} bundle completed today — great work, keep it up.",
+    "default": "You're on track. Keep moving, one quest at a time."
   }
 }
