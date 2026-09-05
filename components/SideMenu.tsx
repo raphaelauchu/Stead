@@ -65,6 +65,12 @@ export default function SideMenu() {
           </button>
           <nav className="flex flex-col gap-1">
             <Link
+              href="/quests"
+              className="rounded-lg px-3 py-3 text-sm text-ink transition-colors duration-150 hover:bg-surface2"
+            >
+              {t("quests")}
+            </Link>
+            <Link
               href="/profile"
               className="rounded-lg px-3 py-3 text-sm text-ink transition-colors duration-150 hover:bg-surface2"
             >

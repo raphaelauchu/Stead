@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import { CATEGORIES } from "@/lib/categories";
+import { ensureQuestItems, groupQuestsByCategory } from "@/lib/quests";
 import { computeStats, computeStreak, lastDays } from "@/lib/stats";
 import { levelProgress } from "@/lib/xp";
 
@@ -16,13 +16,23 @@ export default async function ProgressPage() {
   } = await supabase.auth.getUser();
   if (!user) return null;
 
+  const questItems = await ensureQuestItems(supabase, user.id, (catKey, itemKey) =>
+    tCategories(`${catKey}.items.${itemKey}`)
+  );
+  const categories = groupQuestsByCategory(questItems);
+  const statsCategories = categories.map((cat) => ({
+    key: cat.key,
+    items: cat.items.map((i) => ({ key: i.item_key, xp: i.xp })),
+  }));
+
   const { data: completions } = await supabase
     .from("completions")
     .select("category, item_key, day")
     .eq("user_id", user.id);
 
   const { byDay, dayXp, categoryTotals, historicalXp } = computeStats(
-    completions ?? []
+    completions ?? [],
+    statsCategories
   );
   const streak = computeStreak(byDay);
   const { level } = levelProgress(historicalXp);
@@ -32,7 +42,7 @@ export default async function ProgressPage() {
   const dayValues = days.map((d) => dayXp.get(d) ?? 0);
   const maxDayXp = Math.max(1, ...dayValues);
 
-  const maxCategoryXp = Math.max(1, ...CATEGORIES.map((c) => categoryTotals[c.key] ?? 0));
+  const maxCategoryXp = Math.max(1, ...categories.map((c) => categoryTotals[c.key] ?? 0));
 
   return (
     <div className="flex w-full max-w-sm flex-col gap-5 md:max-w-md">
@@ -93,7 +103,7 @@ export default async function ProgressPage() {
           {t("byCategory")}
         </div>
         <div className="mt-4 flex flex-col gap-3">
-          {CATEGORIES.map((cat) => {
+          {categories.map((cat) => {
             const xp = categoryTotals[cat.key] ?? 0;
             const widthPct = Math.max(3, Math.round((xp / maxCategoryXp) * 100));
             return (

@@ -6,7 +6,8 @@
   "nav": {
     "today": "Today",
     "progress": "Progress",
-    "profile": "Profile"
+    "profile": "Profile",
+    "quests": "Quests"
   },
   "categories": {
     "corps": {
@@ -104,5 +105,14 @@
     "restart": "New streak, new start — just one quest today is enough to get going again.",
     "praiseCategory": "{category} bundle completed today — great work, keep it up.",
     "default": "You're on track. Keep moving, one quest at a time."
+  },
+  "quests": {
+    "title": "My quests",
+    "subtitle": "Customize the quests in each category — edit the text, the XP, add or remove them.",
+    "save": "Save",
+    "delete": "Remove",
+    "newQuestPlaceholder": "New quest",
+    "add": "Add",
+    "minimumNotice": "Every category must keep at least one quest."
   }
 }

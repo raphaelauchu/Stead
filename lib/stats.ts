@@ -1,4 +1,6 @@
-import { CATEGORIES, BUNDLE_BONUS } from "@/lib/categories";
+import { BUNDLE_BONUS } from "@/lib/categories";
+
+export type StatsCategory = { key: string; items: { key: string; xp: number }[] };
 
 export type Completion = { category: string; item_key: string; day: string };
 
@@ -17,7 +19,7 @@ export function groupByDay(completions: Completion[]) {
   return byDay;
 }
 
-export function computeStats(completions: Completion[]) {
+export function computeStats(completions: Completion[], categories: StatsCategory[]) {
   const byDay = groupByDay(completions);
 
   const dayXp = new Map<string, number>();
@@ -26,9 +28,9 @@ export function computeStats(completions: Completion[]) {
 
   for (const [day, doneSet] of byDay) {
     let dXp = 0;
-    for (const cat of CATEGORIES) {
+    for (const cat of categories) {
       let catXp = 0;
-      let allDone = true;
+      let allDone = cat.items.length > 0;
       for (const item of cat.items) {
         if (doneSet.has(`${cat.key}:${item.key}`)) {
           catXp += item.xp;

@@ -1,12 +1,19 @@
-// Structural quest data only — labels live in messages/{locale}.json under
-// categories.<key>.label and categories.<key>.items.<itemKey>, so the app
-// stays translatable. Look up labels with next-intl's `useTranslations` /
-// `getTranslations` using these keys.
+// The four pillars are fixed — they're STEAD's identity. What lives inside
+// each one (the actual quests) is per-user data stored in the `quest_items`
+// table (see lib/quests.ts). This file only keeps:
+//   - CATEGORY_KEYS: the fixed pillar order used everywhere in the UI
+//   - DEFAULT_QUEST_TEMPLATE: the starter quests a brand-new account gets
+//     seeded with (labels are resolved via next-intl at seed time)
+//   - BUNDLE_BONUS: the XP bonus for completing every quest in a pillar
+//     on a given day, regardless of how many quests it has
 
-export type QuestItem = { key: string; xp: number };
-export type Category = { key: string; items: QuestItem[] };
+export const CATEGORY_KEYS = ["corps", "esprit", "coeur", "ame"] as const;
+export type CategoryKey = (typeof CATEGORY_KEYS)[number];
 
-export const CATEGORIES: Category[] = [
+export type QuestItemTemplate = { key: string; xp: number };
+export type CategoryTemplate = { key: CategoryKey; items: QuestItemTemplate[] };
+
+export const DEFAULT_QUEST_TEMPLATE: CategoryTemplate[] = [
   {
     key: "corps",
     items: [

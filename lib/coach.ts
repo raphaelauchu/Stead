@@ -1,6 +1,7 @@
-import { CATEGORIES } from "@/lib/categories";
+export type CoachCategory = { key: string; items: { key: string }[] };
 
 export type CoachContext = {
+  categories: CoachCategory[];
   doneToday: Set<string>; // "category:itemKey"
   categoryPercents: Record<string, number>; // today's % per category
   categoryTotals: Record<string, number>; // lifetime XP per category
@@ -20,13 +21,13 @@ export type CoachInsight = {
  * cost, fully deterministic from data already loaded for the dashboard.
  */
 export function computeCoachInsight(ctx: CoachContext): CoachInsight {
-  const { doneToday, categoryPercents, categoryTotals, streak, hasEverCompletedAnything } = ctx;
+  const { categories, doneToday, categoryPercents, categoryTotals, streak, hasEverCompletedAnything } = ctx;
 
   if (!hasEverCompletedAnything) {
     return { id: "newUser" };
   }
 
-  const totalItems = CATEGORIES.reduce((acc, c) => acc + c.items.length, 0);
+  const totalItems = categories.reduce((acc, c) => acc + c.items.length, 0);
   const doneCountToday = doneToday.size;
   const remainingToday = totalItems - doneCountToday;
   const nothingDoneToday = doneCountToday === 0;
@@ -42,14 +43,15 @@ export function computeCoachInsight(ctx: CoachContext): CoachInsight {
   }
 
   // One category is clearly neglected compared to the others and untouched today.
-  const sortedByTotal = [...CATEGORIES].sort(
+  const sortedByTotal = [...categories].sort(
     (a, b) => (categoryTotals[a.key] ?? 0) - (categoryTotals[b.key] ?? 0)
   );
   const weakest = sortedByTotal[0];
   const strongest = sortedByTotal[sortedByTotal.length - 1];
-  const weakestTotal = categoryTotals[weakest.key] ?? 0;
-  const strongestTotal = categoryTotals[strongest.key] ?? 0;
+  const weakestTotal = weakest ? categoryTotals[weakest.key] ?? 0 : 0;
+  const strongestTotal = strongest ? categoryTotals[strongest.key] ?? 0 : 0;
   if (
+    weakest &&
     strongestTotal > 0 &&
     weakestTotal < strongestTotal * 0.4 &&
     categoryPercents[weakest.key] === 0
@@ -62,7 +64,7 @@ export function computeCoachInsight(ctx: CoachContext): CoachInsight {
   }
 
   // Positive reinforcement for a bundle already completed today.
-  const completedBundle = CATEGORIES.find((c) => categoryPercents[c.key] === 100);
+  const completedBundle = categories.find((c) => categoryPercents[c.key] === 100);
   if (completedBundle) {
     return { id: "praiseCategory", values: { category: completedBundle.key } };
   }

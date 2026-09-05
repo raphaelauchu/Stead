@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import { CATEGORIES, BUNDLE_BONUS } from "@/lib/categories";
+import { BUNDLE_BONUS } from "@/lib/categories";
+import { ensureQuestItems, groupQuestsByCategory } from "@/lib/quests";
 import { computeStats, computeStreak } from "@/lib/stats";
 import { computeCoachInsight } from "@/lib/coach";
 import { levelProgress } from "@/lib/xp";
@@ -26,6 +27,11 @@ export default async function TodayPage() {
     .eq("id", user.id)
     .maybeSingle();
 
+  const questItems = await ensureQuestItems(supabase, user.id, (catKey, itemKey) =>
+    tCategories(`${catKey}.items.${itemKey}`)
+  );
+  const categories = groupQuestsByCategory(questItems);
+
   const today = new Date().toISOString().slice(0, 10);
 
   const { data: completions } = await supabase
@@ -39,18 +45,25 @@ export default async function TodayPage() {
       .map((c) => `${c.category}:${c.item_key}`)
   );
 
-  const { byDay, dayXp, categoryTotals, historicalXp } = computeStats(completions ?? []);
+  const statsCategories = categories.map((cat) => ({
+    key: cat.key,
+    items: cat.items.map((i) => ({ key: i.item_key, xp: i.xp })),
+  }));
+
+  const { byDay, dayXp, categoryTotals, historicalXp } = computeStats(
+    completions ?? [],
+    statsCategories
+  );
   const todayXp = dayXp.get(today) ?? 0;
   const streak = computeStreak(byDay);
 
   const categoryPercents: Record<string, number> = {};
-  for (const cat of CATEGORIES) {
+  for (const cat of categories) {
     const doneCount = cat.items.filter((item) =>
-      doneToday.has(`${cat.key}:${item.key}`)
+      doneToday.has(`${cat.key}:${item.item_key}`)
     ).length;
-    categoryPercents[cat.key] = Math.round(
-      (doneCount / cat.items.length) * 100
-    );
+    categoryPercents[cat.key] =
+      cat.items.length > 0 ? Math.round((doneCount / cat.items.length) * 100) : 0;
   }
 
   const { level, xpIntoLevel, xpForNext, percent } =
@@ -59,6 +72,7 @@ export default async function TodayPage() {
   const hasEverCompletedAnything = (completions ?? []).length > 0;
 
   const insight = computeCoachInsight({
+    categories: statsCategories,
     doneToday,
     categoryPercents,
     categoryTotals,
@@ -116,7 +130,7 @@ export default async function TodayPage() {
       </div>
 
       <div className="mt-4 flex justify-center gap-6">
-        {CATEGORIES.map((cat) => (
+        {categories.map((cat) => (
           <div key={cat.key} className="flex flex-col items-center gap-2">
             <ProgressRing
               percent={categoryPercents[cat.key]}
@@ -135,21 +149,21 @@ export default async function TodayPage() {
       </div>
 
       <div className="mt-7 flex flex-col gap-6 border-t border-line pt-5">
-        {CATEGORIES.map((cat) => (
+        {categories.map((cat) => (
           <div key={cat.key}>
             <div className="font-mono text-xs uppercase tracking-widest text-inkdim">
               {t("bundleTitle", { category: tCategories(`${cat.key}.label`) })}
             </div>
             <div className="mt-3 flex flex-col gap-2">
               {cat.items.map((item) => {
-                const done = doneToday.has(`${cat.key}:${item.key}`);
+                const done = doneToday.has(`${cat.key}:${item.item_key}`);
                 return (
                   <form
-                    key={item.key}
+                    key={item.id}
                     action={toggleCompletion.bind(
                       null,
                       cat.key,
-                      item.key,
+                      item.item_key,
                       today,
                       !done
                     )}
@@ -169,7 +183,7 @@ export default async function TodayPage() {
                           <span className="h-1.5 w-1.5 rounded-full bg-surface" />
                         )}
                       </span>
-                      {tCategories(`${cat.key}.items.${item.key}`)}
+                      {item.label}
                       <span className="ml-auto font-mono text-xs text-accent">
                         +{item.xp}
                       </span>

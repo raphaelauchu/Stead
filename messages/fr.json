@@ -6,7 +6,8 @@
   "nav": {
     "today": "Aujourd'hui",
     "progress": "Progrès",
-    "profile": "Profil"
+    "profile": "Profil",
+    "quests": "Quêtes"
   },
   "categories": {
     "corps": {
@@ -104,5 +105,14 @@
     "restart": "Nouvelle séquence, nouveau départ — une seule quête aujourd'hui suffit pour repartir.",
     "praiseCategory": "Bundle {category} complété aujourd'hui — excellent travail, continue comme ça.",
     "default": "Tu es sur la bonne voie. Continue à avancer, une quête à la fois."
+  },
+  "quests": {
+    "title": "Mes quêtes",
+    "subtitle": "Personnalise les quêtes de chaque catégorie — modifie le texte, le XP, ajoute-en ou retire-en.",
+    "save": "Enregistrer",
+    "delete": "Retirer",
+    "newQuestPlaceholder": "Nouvelle quête",
+    "add": "Ajouter",
+    "minimumNotice": "Chaque catégorie doit garder au moins une quête."
   }
 }

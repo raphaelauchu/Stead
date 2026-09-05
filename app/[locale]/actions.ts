@@ -57,3 +57,84 @@ export async function updateProfile(formData: FormData) {
 
   revalidatePath("/", "layout");
 }
+
+
+export async function updateQuestItem(itemId: string, formData: FormData) {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;
+
+  const label = String(formData.get("label") ?? "").trim();
+  const xpRaw = parseInt(String(formData.get("xp") ?? ""), 10);
+  const xp = Number.isFinite(xpRaw) && xpRaw > 0 ? xpRaw : 1;
+  if (!label) return;
+
+  await supabase
+    .from("quest_items")
+    .update({ label, xp })
+    .eq("id", itemId)
+    .eq("user_id", user.id);
+
+  revalidatePath("/", "layout");
+}
+
+export async function deleteQuestItem(itemId: string, category: string) {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;
+
+  // Never let a category drop to zero quests — the bundle mechanic needs
+  // at least one to mean anything.
+  const { count } = await supabase
+    .from("quest_items")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", user.id)
+    .eq("category", category);
+  if ((count ?? 0) <= 1) return;
+
+  await supabase
+    .from("quest_items")
+    .delete()
+    .eq("id", itemId)
+    .eq("user_id", user.id);
+
+  revalidatePath("/", "layout");
+}
+
+export async function addQuestItem(category: string, formData: FormData) {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;
+
+  const label = String(formData.get("label") ?? "").trim();
+  const xpRaw = parseInt(String(formData.get("xp") ?? ""), 10);
+  const xp = Number.isFinite(xpRaw) && xpRaw > 0 ? xpRaw : 10;
+  if (!label) return;
+
+  const { count } = await supabase
+    .from("quest_items")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", user.id)
+    .eq("category", category);
+  // Soft cap so a bundle stays a meaningful, completable daily set.
+  if ((count ?? 0) >= 8) return;
+
+  const itemKey = `custom_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`;
+
+  await supabase.from("quest_items").insert({
+    user_id: user.id,
+    category,
+    item_key: itemKey,
+    label,
+    xp,
+    position: count ?? 0,
+  });
+
+  revalidatePath("/", "layout");
+}
