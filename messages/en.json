@@ -3,6 +3,11 @@
     "title": "Stead",
     "description": "A progression system for becoming the man you want to be."
   },
+  "nav": {
+    "today": "Today",
+    "progress": "Progress",
+    "profile": "Profile"
+  },
   "categories": {
     "corps": {
       "label": "Body",
@@ -52,6 +57,23 @@
     "bundleTitle": "Today's bundle — {category}",
     "bundleComplete": "Bundle complete — bonus +{bonus} XP",
     "emptyState": "Check off your first quest below to get started."
+  },
+  "progress": {
+    "title": "My progress",
+    "level": "Level",
+    "streakLabel": "Day streak",
+    "activeDaysLabel": "Active days",
+    "last14Days": "Last 14 days",
+    "byCategory": "By category"
+  },
+  "profile": {
+    "title": "Profile",
+    "email": "Email",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "goalQuestion": "Priority area",
+    "save": "Save",
+    "signOut": "Sign out"
   },
   "login": {
     "tagline": "A progression system for becoming the man you want to be.",

@@ -3,6 +3,11 @@
     "title": "Stead",
     "description": "Un système de progression pour devenir l'homme que tu veux être."
   },
+  "nav": {
+    "today": "Aujourd'hui",
+    "progress": "Progrès",
+    "profile": "Profil"
+  },
   "categories": {
     "corps": {
       "label": "Corps",
@@ -52,6 +57,23 @@
     "bundleTitle": "Bundle du jour — {category}",
     "bundleComplete": "Bundle complet — bonus +{bonus} XP",
     "emptyState": "Coche ta première quête ci-dessous pour commencer."
+  },
+  "progress": {
+    "title": "Mes progrès",
+    "level": "Niveau",
+    "streakLabel": "Jours de suite",
+    "activeDaysLabel": "Jours actifs",
+    "last14Days": "14 derniers jours",
+    "byCategory": "Par catégorie"
+  },
+  "profile": {
+    "title": "Profil",
+    "email": "Courriel",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "goalQuestion": "Domaine prioritaire",
+    "save": "Enregistrer",
+    "signOut": "Se déconnecter"
   },
   "login": {
     "tagline": "Un système de progression pour devenir l'homme que tu veux être.",

@@ -36,3 +36,24 @@ export async function signOut(locale: string) {
   revalidatePath("/", "layout");
   redirect({ href: "/login", locale });
 }
+
+export async function updateProfile(formData: FormData) {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;
+
+  const first_name = String(formData.get("first_name") ?? "").trim();
+  const last_name = String(formData.get("last_name") ?? "").trim();
+  const goal = String(formData.get("goal") ?? "");
+
+  await supabase.from("profiles").upsert({
+    id: user.id,
+    first_name,
+    last_name,
+    goal,
+  });
+
+  revalidatePath("/", "layout");
+}
