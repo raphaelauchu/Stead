@@ -22,9 +22,20 @@ function ProgressIcon({ active }: { active: boolean }) {
   );
 }
 
+function ObjectifsIcon({ active }: { active: boolean }) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="8.5" />
+      <circle cx="12" cy="12" r="4.5" />
+      {active && <circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none" />}
+    </svg>
+  );
+}
+
 const ITEMS = [
   { href: "/", key: "today", Icon: TodayIcon },
   { href: "/progress", key: "progress", Icon: ProgressIcon },
+  { href: "/objectifs", key: "objectifs", Icon: ObjectifsIcon },
 ] as const;
 
 export default function BottomNav() {

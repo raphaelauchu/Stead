@@ -6,8 +6,13 @@
 //     seeded with (labels are resolved via next-intl at seed time)
 //   - BUNDLE_BONUS: the XP bonus for completing every quest in a pillar
 //     on a given day, regardless of how many quests it has
+//
+// "argent" replaced the original "ame" pillar (Money/Business instead of
+// Soul) — see objectifs_finances_setup.sql for the one-time rename of
+// existing quest_items/completions rows. Only the key and its theme
+// changed; nothing about how pillars work did.
 
-export const CATEGORY_KEYS = ["corps", "esprit", "coeur", "ame"] as const;
+export const CATEGORY_KEYS = ["corps", "esprit", "coeur", "argent"] as const;
 export type CategoryKey = (typeof CATEGORY_KEYS)[number];
 
 export type QuestItemTemplate = { key: string; xp: number };
@@ -27,7 +32,7 @@ export const DEFAULT_QUEST_TEMPLATE: CategoryTemplate[] = [
     items: [
       { key: "tache", xp: 20 },
       { key: "lecture", xp: 10 },
-      { key: "finances", xp: 10 },
+      { key: "journaling", xp: 10 },
     ],
   },
   {
@@ -39,11 +44,11 @@ export const DEFAULT_QUEST_TEMPLATE: CategoryTemplate[] = [
     ],
   },
   {
-    key: "ame",
+    key: "argent",
     items: [
-      { key: "solo", xp: 10 },
-      { key: "journaling", xp: 10 },
-      { key: "routine_matin", xp: 10 },
+      { key: "finances", xp: 10 },
+      { key: "action_business", xp: 30 },
+      { key: "epargne", xp: 20 },
     ],
   },
 ];

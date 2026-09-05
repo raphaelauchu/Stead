@@ -7,7 +7,8 @@
     "today": "Aujourd'hui",
     "progress": "Progrès",
     "profile": "Profil",
-    "quests": "Quêtes"
+    "quests": "Quêtes",
+    "objectifs": "Objectifs"
   },
   "categories": {
     "corps": {
@@ -23,7 +24,7 @@
       "items": {
         "tache": "Tâche prioritaire complétée",
         "lecture": "20 minutes de lecture",
-        "finances": "Dépenses du jour notées"
+        "journaling": "Réflexion ou journaling"
       }
     },
     "coeur": {
@@ -34,20 +35,20 @@
         "conversation": "Conversation difficile abordée"
       }
     },
-    "ame": {
-      "label": "Âme",
+    "argent": {
+      "label": "Argent",
       "items": {
-        "solo": "Moment seul sans écran",
-        "journaling": "Réflexion ou journaling",
-        "routine_matin": "Routine du matin"
+        "finances": "Dépenses du jour notées",
+        "action_business": "Action pour ton business ou ta carrière",
+        "epargne": "Argent mis de côté aujourd'hui"
       }
     }
   },
   "goals": {
     "corps": "Corps — fitness, nutrition, apparence",
-    "esprit": "Esprit — productivité, finances, apprentissage",
+    "esprit": "Esprit — productivité, apprentissage",
     "coeur": "Cœur — communication, émotions",
-    "ame": "Âme — solitude, rituel"
+    "argent": "Argent — business, finances, investissements"
   },
   "dashboard": {
     "greeting": "Salut, {name}",
@@ -118,6 +119,42 @@
       "easy": "Facile · 10 XP",
       "medium": "Moyen · 20 XP",
       "hard": "Difficile · 30 XP"
+    }
+  },
+  "business": {
+    "title": "Objectifs",
+    "venturesTitle": "Business & projets",
+    "addVenture": "Nouveau business",
+    "venturePlaceholder": "Nom du business",
+    "noVentures": "Aucun business pour l'instant — ajoute-en un ci-dessous.",
+    "backToVentures": "Tous les business",
+    "personalTitle": "Objectifs personnels",
+    "addObjective": "Ajouter",
+    "objectiveTitlePlaceholder": "Titre de l'objectif",
+    "targetDateLabel": "Date cible (optionnel)",
+    "addMilestone": "Ajouter",
+    "milestonePlaceholder": "Nouvelle étape",
+    "noObjectives": "Aucun objectif pour l'instant.",
+    "progressLabel": "{done}/{total} étapes",
+    "completed": "Objectif atteint",
+    "delete": "Retirer",
+    "finance": {
+      "title": "Finances",
+      "balance": "Solde",
+      "thisMonth": "Ce mois-ci",
+      "income": "Revenus",
+      "expense": "Dépenses",
+      "invested": "Investi (total)",
+      "addEntry": "Ajouter",
+      "type": {
+        "revenu": "Revenu",
+        "depense": "Dépense",
+        "investissement": "Investissement"
+      },
+      "amountPlaceholder": "Montant",
+      "categoryPlaceholder": "Catégorie (optionnel)",
+      "notePlaceholder": "Note (optionnel)",
+      "noEntries": "Aucune entrée pour l'instant."
     }
   }
 }

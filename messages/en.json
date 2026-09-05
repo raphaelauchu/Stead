@@ -7,7 +7,8 @@
     "today": "Today",
     "progress": "Progress",
     "profile": "Profile",
-    "quests": "Quests"
+    "quests": "Quests",
+    "objectifs": "Goals"
   },
   "categories": {
     "corps": {
@@ -23,7 +24,7 @@
       "items": {
         "tache": "Top priority task done",
         "lecture": "20 minutes of reading",
-        "finances": "Today's spending logged"
+        "journaling": "Reflection or journaling"
       }
     },
     "coeur": {
@@ -34,20 +35,20 @@
         "conversation": "Had a hard conversation"
       }
     },
-    "ame": {
-      "label": "Soul",
+    "argent": {
+      "label": "Money",
       "items": {
-        "solo": "Screen-free moment alone",
-        "journaling": "Reflection or journaling",
-        "routine_matin": "Morning routine"
+        "finances": "Today's spending logged",
+        "action_business": "One action taken for your business or career",
+        "epargne": "Money set aside today"
       }
     }
   },
   "goals": {
     "corps": "Body — fitness, nutrition, appearance",
-    "esprit": "Mind — productivity, finances, learning",
+    "esprit": "Mind — productivity, learning",
     "coeur": "Heart — communication, emotions",
-    "ame": "Soul — solitude, ritual"
+    "argent": "Money — business, finances, investing"
   },
   "dashboard": {
     "greeting": "Hey, {name}",
@@ -118,6 +119,42 @@
       "easy": "Easy · 10 XP",
       "medium": "Medium · 20 XP",
       "hard": "Hard · 30 XP"
+    }
+  },
+  "business": {
+    "title": "Goals",
+    "venturesTitle": "Businesses & projects",
+    "addVenture": "New business",
+    "venturePlaceholder": "Business name",
+    "noVentures": "No businesses yet — add one below.",
+    "backToVentures": "All businesses",
+    "personalTitle": "Personal goals",
+    "addObjective": "Add",
+    "objectiveTitlePlaceholder": "Goal title",
+    "targetDateLabel": "Target date (optional)",
+    "addMilestone": "Add",
+    "milestonePlaceholder": "New step",
+    "noObjectives": "No goals yet.",
+    "progressLabel": "{done}/{total} steps",
+    "completed": "Goal reached",
+    "delete": "Remove",
+    "finance": {
+      "title": "Finances",
+      "balance": "Balance",
+      "thisMonth": "This month",
+      "income": "Income",
+      "expense": "Expenses",
+      "invested": "Invested (total)",
+      "addEntry": "Add",
+      "type": {
+        "revenu": "Income",
+        "depense": "Expense",
+        "investissement": "Investment"
+      },
+      "amountPlaceholder": "Amount",
+      "categoryPlaceholder": "Category (optional)",
+      "notePlaceholder": "Note (optional)",
+      "noEntries": "No entries yet."
     }
   }
 }
