@@ -1,0 +1,74 @@
+{
+  "app": {
+    "title": "Stead",
+    "description": "A progression system for becoming the man you want to be."
+  },
+  "categories": {
+    "corps": {
+      "label": "Body",
+      "items": {
+        "seance": "Workout completed",
+        "repas": "Home-cooked meal",
+        "routine_soir": "Evening routine"
+      }
+    },
+    "esprit": {
+      "label": "Mind",
+      "items": {
+        "tache": "Top priority task done",
+        "lecture": "20 minutes of reading",
+        "finances": "Today's spending logged"
+      }
+    },
+    "coeur": {
+      "label": "Heart",
+      "items": {
+        "emotion": "Named an emotion instead of burying it",
+        "moment": "Quality time, phone away",
+        "conversation": "Had a hard conversation"
+      }
+    },
+    "ame": {
+      "label": "Soul",
+      "items": {
+        "solo": "Screen-free moment alone",
+        "journaling": "Reflection or journaling",
+        "routine_matin": "Morning routine"
+      }
+    }
+  },
+  "goals": {
+    "corps": "Body — fitness, nutrition, appearance",
+    "esprit": "Mind — productivity, finances, learning",
+    "coeur": "Heart — communication, emotions",
+    "ame": "Soul — solitude, ritual"
+  },
+  "dashboard": {
+    "greeting": "Hey, {name}",
+    "greetingFallback": "Today",
+    "signOut": "Sign out",
+    "level": "Level",
+    "bundleTitle": "Today's bundle — {category}",
+    "bundleComplete": "Bundle complete — bonus +{bonus} XP"
+  },
+  "login": {
+    "signIn": "Sign in",
+    "signUp": "Create an account",
+    "emailPlaceholder": "you@email.com",
+    "passwordPlaceholder": "Password",
+    "passwordPlaceholderMin": "Password (6 characters min.)",
+    "firstNamePlaceholder": "First name",
+    "lastNamePlaceholder": "Last name",
+    "signInLoading": "Signing in...",
+    "signUpLoading": "Creating...",
+    "signUpButton": "Create my account",
+    "goalQuestion": "Which area do you want to prioritize first?",
+    "goalRequired": "Choose an area to prioritize.",
+    "confirmEmail": "Account created — confirm your email before signing in (check your inbox).",
+    "errors": {
+      "invalidCredentials": "Incorrect email or password.",
+      "userExists": "An account already exists with this email.",
+      "passwordTooShort": "Password must be at least 6 characters."
+    }
+  }
+}

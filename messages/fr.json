@@ -1,0 +1,74 @@
+{
+  "app": {
+    "title": "Stead",
+    "description": "Un système de progression pour devenir l'homme que tu veux être."
+  },
+  "categories": {
+    "corps": {
+      "label": "Corps",
+      "items": {
+        "seance": "Séance complétée",
+        "repas": "Repas maison cuisiné",
+        "routine_soir": "Routine du soir"
+      }
+    },
+    "esprit": {
+      "label": "Esprit",
+      "items": {
+        "tache": "Tâche prioritaire complétée",
+        "lecture": "20 minutes de lecture",
+        "finances": "Dépenses du jour notées"
+      }
+    },
+    "coeur": {
+      "label": "Cœur",
+      "items": {
+        "emotion": "Émotion nommée, pas enfouie",
+        "moment": "Moment de qualité, téléphone loin",
+        "conversation": "Conversation difficile abordée"
+      }
+    },
+    "ame": {
+      "label": "Âme",
+      "items": {
+        "solo": "Moment seul sans écran",
+        "journaling": "Réflexion ou journaling",
+        "routine_matin": "Routine du matin"
+      }
+    }
+  },
+  "goals": {
+    "corps": "Corps — fitness, nutrition, apparence",
+    "esprit": "Esprit — productivité, finances, apprentissage",
+    "coeur": "Cœur — communication, émotions",
+    "ame": "Âme — solitude, rituel"
+  },
+  "dashboard": {
+    "greeting": "Salut, {name}",
+    "greetingFallback": "Aujourd'hui",
+    "signOut": "Se déconnecter",
+    "level": "Niveau",
+    "bundleTitle": "Bundle du jour — {category}",
+    "bundleComplete": "Bundle complet — bonus +{bonus} XP"
+  },
+  "login": {
+    "signIn": "Se connecter",
+    "signUp": "Créer un compte",
+    "emailPlaceholder": "ton@courriel.com",
+    "passwordPlaceholder": "Mot de passe",
+    "passwordPlaceholderMin": "Mot de passe (6 caractères min.)",
+    "firstNamePlaceholder": "Prénom",
+    "lastNamePlaceholder": "Nom",
+    "signInLoading": "Connexion...",
+    "signUpLoading": "Création...",
+    "signUpButton": "Créer mon compte",
+    "goalQuestion": "Quel domaine tu veux prioriser en premier ?",
+    "goalRequired": "Choisis un domaine à prioriser.",
+    "confirmEmail": "Compte créé — confirme ton courriel avant de te connecter (regarde ta boîte de réception).",
+    "errors": {
+      "invalidCredentials": "Courriel ou mot de passe incorrect.",
+      "userExists": "Un compte existe déjà avec ce courriel.",
+      "passwordTooShort": "Le mot de passe doit contenir au moins 6 caractères."
+    }
+  }
+}

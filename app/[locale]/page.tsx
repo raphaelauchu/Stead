@@ -1,29 +1,45 @@
-import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
+import { redirect } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { CATEGORIES, BUNDLE_BONUS } from "@/lib/categories";
 import { levelProgress } from "@/lib/xp";
 import { toggleCompletion, signOut } from "./actions";
 import InfinityMark from "@/components/InfinityMark";
 import ProgressRing from "@/components/ProgressRing";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export const dynamic = "force-dynamic";
 
-export default async function Home() {
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const t = await getTranslations("dashboard");
+  const tCategories = await getTranslations("categories");
+
   const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/login");
+    redirect({ href: "/login", locale });
   }
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("first_name")
+    .eq("id", user!.id)
+    .maybeSingle();
 
   const today = new Date().toISOString().slice(0, 10);
 
   const { data: completions } = await supabase
     .from("completions")
     .select("category, item_key, day")
-    .eq("user_id", user.id);
+    .eq("user_id", user!.id);
 
   const doneToday = new Set(
     (completions ?? [])
@@ -53,19 +69,26 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen flex flex-col items-center px-6 py-16">
-      <div className="flex items-center gap-3">
-        <InfinityMark className="w-8 text-accent" />
-        <span className="font-display text-lg tracking-[0.15em] text-ink">
-          STEAD
-        </span>
+      <div className="flex w-full max-w-sm items-center justify-between">
+        <div className="flex items-center gap-3">
+          <InfinityMark className="w-8 text-accent" />
+          <span className="font-display text-lg tracking-[0.15em] text-ink">
+            STEAD
+          </span>
+        </div>
+        <LanguageSwitcher />
       </div>
 
       <div className="mt-10 w-full max-w-sm rounded-[22px] border border-line bg-surface p-8">
         <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-widest text-inkdim">
-          <span>Aujourd&apos;hui</span>
-          <form action={signOut}>
+          <span>
+            {profile?.first_name
+              ? t("greeting", { name: profile.first_name })
+              : t("greetingFallback")}
+          </span>
+          <form action={signOut.bind(null, locale)}>
             <button type="submit" className="underline">
-              Se déconnecter
+              {t("signOut")}
             </button>
           </form>
         </div>
@@ -80,7 +103,7 @@ export default async function Home() {
           />
           <ProgressRing percent={percent} size={180} strokeWidth={10}>
             <span className="font-mono text-[11px] uppercase tracking-widest text-inkdim">
-              Niveau
+              {t("level")}
             </span>
             <span className="font-display text-4xl text-ink">{level}</span>
             <span className="mt-1 font-mono text-xs text-inkdim">
@@ -102,7 +125,7 @@ export default async function Home() {
                 </span>
               </ProgressRing>
               <span className="font-mono text-[11px] uppercase tracking-wide text-inkdim">
-                {cat.label}
+                {tCategories(`${cat.key}.label`)}
               </span>
             </div>
           ))}
@@ -112,7 +135,7 @@ export default async function Home() {
           {CATEGORIES.map((cat) => (
             <div key={cat.key}>
               <div className="font-mono text-xs uppercase tracking-widest text-inkdim">
-                Bundle du jour — {cat.label}
+                {t("bundleTitle", { category: tCategories(`${cat.key}.label`) })}
               </div>
               <div className="mt-3 flex flex-col gap-2">
                 {cat.items.map((item) => {
@@ -143,7 +166,7 @@ export default async function Home() {
                             <span className="h-1.5 w-1.5 rounded-full bg-surface" />
                           )}
                         </span>
-                        {item.label}
+                        {tCategories(`${cat.key}.items.${item.key}`)}
                         <span className="ml-auto font-mono text-xs text-accent">
                           +{item.xp}
                         </span>
@@ -154,7 +177,7 @@ export default async function Home() {
               </div>
               {categoryPercents[cat.key] === 100 && (
                 <div className="mt-2 font-mono text-[11px] text-accent">
-                  Bundle complet — bonus +{BUNDLE_BONUS} XP
+                  {t("bundleComplete", { bonus: BUNDLE_BONUS })}
                 </div>
               )}
             </div>

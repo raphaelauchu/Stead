@@ -1,9 +1,17 @@
 import { createServerClient } from "@supabase/ssr";
+import createIntlMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
+import { routing } from "./i18n/routing";
+
+const handleI18nRouting = createIntlMiddleware(routing);
 
 export async function middleware(request: NextRequest) {
-  let response = NextResponse.next({ request });
+  // 1. Let next-intl figure out the locale and build its response
+  //    (locale-prefix redirects, locale cookie, etc.)
+  const response = handleI18nRouting(request);
 
+  // 2. Layer the Supabase session refresh on top of that same response,
+  //    so cookies set by either system are preserved.
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -16,7 +24,6 @@ export async function middleware(request: NextRequest) {
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           );
-          response = NextResponse.next({ request });
           cookiesToSet.forEach(({ name, value, options }) =>
             response.cookies.set(name, value, options)
           );
@@ -31,5 +38,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!api|auth|_next|_vercel|.*\\..*).*)"],
 };

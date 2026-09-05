@@ -1,41 +1,42 @@
-export type QuestItem = { key: string; label: string; xp: number };
-export type Category = { key: string; label: string; items: QuestItem[] };
+// Structural quest data only — labels live in messages/{locale}.json under
+// categories.<key>.label and categories.<key>.items.<itemKey>, so the app
+// stays translatable. Look up labels with next-intl's `useTranslations` /
+// `getTranslations` using these keys.
+
+export type QuestItem = { key: string; xp: number };
+export type Category = { key: string; items: QuestItem[] };
 
 export const CATEGORIES: Category[] = [
   {
     key: "corps",
-    label: "Corps",
     items: [
-      { key: "seance", label: "Séance complétée", xp: 25 },
-      { key: "repas", label: "Repas maison cuisiné", xp: 20 },
-      { key: "routine_soir", label: "Routine du soir", xp: 15 },
+      { key: "seance", xp: 25 },
+      { key: "repas", xp: 20 },
+      { key: "routine_soir", xp: 15 },
     ],
   },
   {
     key: "esprit",
-    label: "Esprit",
     items: [
-      { key: "tache", label: "Tâche prioritaire complétée", xp: 20 },
-      { key: "lecture", label: "20 minutes de lecture", xp: 15 },
-      { key: "finances", label: "Dépenses du jour notées", xp: 15 },
+      { key: "tache", xp: 20 },
+      { key: "lecture", xp: 15 },
+      { key: "finances", xp: 15 },
     ],
   },
   {
     key: "coeur",
-    label: "Cœur",
     items: [
-      { key: "emotion", label: "Émotion nommée, pas enfouie", xp: 25 },
-      { key: "moment", label: "Moment de qualité, téléphone loin", xp: 20 },
-      { key: "conversation", label: "Conversation difficile abordée", xp: 20 },
+      { key: "emotion", xp: 25 },
+      { key: "moment", xp: 20 },
+      { key: "conversation", xp: 20 },
     ],
   },
   {
     key: "ame",
-    label: "Âme",
     items: [
-      { key: "solo", label: "Moment seul sans écran", xp: 15 },
-      { key: "journaling", label: "Réflexion ou journaling", xp: 15 },
-      { key: "routine_matin", label: "Routine du matin", xp: 15 },
+      { key: "solo", xp: 15 },
+      { key: "journaling", xp: 15 },
+      { key: "routine_matin", xp: 15 },
     ],
   },
 ];

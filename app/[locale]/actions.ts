@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { redirect } from "@/i18n/navigation";
 
 export async function toggleCompletion(
   category: string,
@@ -26,11 +27,12 @@ export async function toggleCompletion(
       .match({ user_id: user.id, category, item_key: itemKey, day });
   }
 
-  revalidatePath("/");
+  revalidatePath("/", "layout");
 }
 
-export async function signOut() {
+export async function signOut(locale: string) {
   const supabase = createClient();
   await supabase.auth.signOut();
-  revalidatePath("/");
+  revalidatePath("/", "layout");
+  redirect({ href: "/login", locale });
 }
