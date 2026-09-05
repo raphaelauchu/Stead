@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import InfinityMark from "@/components/InfinityMark";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import BottomNav from "@/components/BottomNav";
+import SideMenu from "@/components/SideMenu";
 
 export default async function AppShellLayout({
   children,
@@ -25,6 +26,7 @@ export default async function AppShellLayout({
     <div className="min-h-screen pb-24">
       <header className="mx-auto flex w-full max-w-sm items-center justify-between px-6 pt-10 md:max-w-md">
         <div className="flex items-center gap-3">
+          <SideMenu />
           <InfinityMark className="w-7 text-accent" />
           <span className="font-display text-base tracking-[0.15em] text-ink">
             STEAD

@@ -22,19 +22,9 @@ function ProgressIcon({ active }: { active: boolean }) {
   );
 }
 
-function ProfileIcon({ active }: { active: boolean }) {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="8.5" r="3.5" />
-      <path d="M4.5 19.5c1.5-3.5 4.5-5.5 7.5-5.5s6 2 7.5 5.5" />
-    </svg>
-  );
-}
-
 const ITEMS = [
   { href: "/", key: "today", Icon: TodayIcon },
   { href: "/progress", key: "progress", Icon: ProgressIcon },
-  { href: "/profile", key: "profile", Icon: ProfileIcon },
 ] as const;
 
 export default function BottomNav() {
